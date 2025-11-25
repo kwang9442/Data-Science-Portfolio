@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volleyball CMJ Load & Readiness Analysis</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>Volleyball CMJ Load & Readiness Analysis</h1>
+</header>
+
+<section>
+
+<h2>Project Overview</h2>
+<p>
+In collegiate volleyball, managing athlete fatigue and recovery is critical for optimizing performance, 
+reducing injury risk, and preparing athletes for high-intensity competition. 
+This project analyzes <strong>Countermovement Jump (CMJ)</strong> metrics collected before and after practices 
+and matches to evaluate how player load affects neuromuscular readiness.
+</p>
+
+<p>
+Using a combination of <strong>mixed-effects models, load adjustments, and feature engineering</strong>, 
+this analysis evaluates whether short-term (7-day) and medium-term (21-day) training loads relate to 
+changes in CMJ performance metrics such as RSI_Modified and Jump Height.
+</p>
+
+<p class="disclaimer">
+<strong>Confidentiality Notice:</strong> Due to NCAA Division I sports data restrictions, raw CMJ values, force-plate distributions, 
+and athlete identities cannot be displayed. All examples below use anonymized variables and simulated formatting only.
+</p>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- MOST IMPRESSIVE SECTION: MIXED EFFECTS MODEL USING WITHIN- AND BETWEEN-ATHLETE LOAD -->
+<!-- ========================================================= -->
+
+<section>
+
+<h2>1. Mixed-Effects Model with Within- and Between-Athlete Load Effects</h2>
+
+<p>
+To isolate individual athlete differences, I used a <strong>random intercept per athlete</strong>.  
+This separates <em>within-athlete</em> training fluctuations from <em>between-athlete</em> load differences —  
+a technique widely used in high-performance sports analytics.
+</p>
+
+<pre><code class="language-python">
+# Compute athlete-specific mean loads
+CMJ_2['load7_mean']  = CMJ_2.groupby('profileID')['jumps_7d'].transform('mean')
+CMJ_2['load21_mean'] = CMJ_2.groupby('profileID')['jumps_21d'].transform('mean')
+
+# Within-athlete deviations
+CMJ_2['load7_within']  = CMJ_2['jumps_7d']  - CMJ_2['load7_mean']
+CMJ_2['load21_within'] = CMJ_2['jumps_21d'] - CMJ_2['load21_mean']
+
+# Mixed model with random effects (random intercept for each athlete)
+model = smf.mixedlm(
+    "RSI_Modified ~ load7_within + load21_within + load7_mean + load21_mean",
+    data=CMJ_2,
+    groups="profileID"
+).fit()
+
+model.summary()
+</code></pre>
+
+<p>
+This model quantifies how CMJ readiness responds to changes in load both <em>within</em> and <em>between</em> athletes — 
+a key technique when evaluating training response in team sports.
+</p>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- SECOND: MODELS WITH DIRECT LOAD VARIABLES + RATIO FEATURE -->
+<!-- ========================================================= -->
+
+<section>
+
+<h2>2. Modeling Load Using Raw Counts & Load Ratios</h2>
+
+<p>
+Next, I examined how raw 7-day and 21-day jump volumes predict RSI_Modified using a mixed-effects structure:
+</p>
+
+<pre><code class="language-python">
+# Mixed model using raw load variables
+model_raw = smf.mixedlm(
+    "RSI_Modified ~ Q('jumps_7d') + Q('jumps_21d')",
+    data=CMJ_2,
+    groups=CMJ_2['profileID']
+).fit()
+
+model_raw.summary()
+
+# Ratio feature: 7-day vs 21-day load comparison
+CMJ_2['jump_load_ratio'] = CMJ_2['jumps_7d'] / CMJ_2['jumps_21d']
+
+model_ratio = smf.mixedlm(
+    "RSI_Modified ~ jump_load_ratio",
+    data=CMJ_2,
+    groups=CMJ_2['profileID']
+).fit()
+
+model_ratio.summary()
+</code></pre>
+
+<p>
+The load-ratio feature helps evaluate whether rapid short-term load spikes coincide with reduced athlete readiness.
+</p>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- THIRD: VISUALIZATION OF LOAD VS CMJ PERFORMANCE -->
+<!-- ========================================================= -->
+
+<section>
+
+<h2>3. Athlete-Specific Regression Visualization</h2>
+
+<p>
+To visualize how each athlete responds differently to load, I plotted individual regressions with separate best-fit lines:
+</p>
+
+<pre><code class="language-python">
+for athlete_id, athlete_df in CMJ_2.groupby('profileID'):
+    sns.regplot(
+        x=athlete_df['jumps_7d'],
+        y=athlete_df["jump_height"],
+        scatter_kws={'alpha':0.6},
+        line_kws={'linewidth':1}
+    )
+
+plt.title("Jump Height vs 7-Day Load (Random Effects Structure)")
+plt.xlabel("7-Day Jump Count")
+plt.ylabel("Jump Height (cm)")
+</code></pre>
+
+<p>
+This visualization reinforces why random-effects modeling is essential — 
+each athlete displays a unique load-response curve.
+</p>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- FOURTH: PRE/POST PRACTICE LOAD ADJUSTMENTS -->
+<!-- ========================================================= -->
+
+<section>
+
+<h2>4. Adjusting Load Metrics for Pre/Post Practice Measurements</h2>
+
+<p>
+Since CMJ tests occur both before ("Pre") and after ("Post") training sessions, load values needed adjustments.
+</p>
+
+<pre><code class="language-python">
+# Adjust load values so PRE CMJs exclude the current day's session
+adjust_vars = {
+    'active_mins_7d': 'daily_active_mins',
+    'energy_7d': 'daily_energy',
+    'jumps_7d': 'daily_jumps',
+    'jumps15_7d': 'daily_jumps15',
+    'jumps20_7d': 'daily_jumps20'
+}
+
+for load_var, daily_var in adjust_vars.items():
+    adj_col = load_var + "_adjusted"
+    CMJ_2[adj_col] = CMJ_2[load_var]
+    CMJ_2.loc[CMJ_2['session_timing'] == "Pre", adj_col] = \
+        CMJ_2[load_var] - CMJ_2[daily_var]
+</code></pre>
+
+<p>
+This ensures CMJ results aren’t incorrectly attributed to training load that occurred <em>after</em> the measurement.
+</p>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- LAST: AUTOMATED LOOP TESTING MANY VARIABLES -->
+<!-- ========================================================= -->
+
+<section>
+
+<h2>5. Automated Mixed-Effects Modeling Across All Load Variables</h2>
+
+<p>
+To evaluate all load features systematically, I automated looping through every variable and fitting a mixed model:
+</p>
+
+<pre><code class="language-python">
+load_features = [
+    'active_mins_7d', 'energy_7d', 'jumps_7d', 'jumps15_7d', 'jumps20_7d',
+    'active_mins_21d', 'energy_21d', 'jumps_21d', 'jumps15_21d', 'jumps20_21d',
+    'acwr_active_mins', 'acwr_energy', 'acwr_jumps'
+]
+
+for feature in load_features:
+    df = CMJ_2.dropna(subset=[feature, "RSI_Modified", "profileID"])
+
+    if df.shape[0] > 30:
+        model = smf.mixedlm(
+            f"RSI_Modified ~ Q('{feature}')",
+            data=df,
+            groups=df['profileID']
+        ).fit()
+
+        print("\n==============================")
+        print(f"RESULTS FOR: {feature}")
+        print(model.summary())
+</code></pre>
+
+<p>
+This helped identify which load metrics consistently predict CMJ readiness.
+</p>
+
+</section>
+
+
+<footer>
+    <a href="../index.html">← Back to Home</a>
+</footer>
+
+</body>
+</html>
