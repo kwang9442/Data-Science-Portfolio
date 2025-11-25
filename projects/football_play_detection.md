@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>D1 Football — Play Detection Project</title>
 
-    <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-    <!-- Syntax Highlighting -->
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
@@ -24,26 +22,31 @@
         header {
             background: #0b1d3a;
             color: white;
-            padding: 40px 20px;
+            padding: 45px 20px;
             text-align: center;
         }
         header h1 {
             margin: 0;
-            font-size: 2.3rem;
+            font-size: 2.4rem;
             font-weight: 700;
         }
         .container {
             max-width: 900px;
             margin: 40px auto;
-            background: #fff;
+            background: white;
             padding: 40px;
             border-radius: 12px;
             box-shadow: 0 3px 10px rgba(0,0,0,0.1);
         }
         h2 {
             margin-top: 40px;
-            font-size: 1.6rem;
+            font-size: 1.7rem;
             color: #0b1d3a;
+        }
+        .section-desc {
+            font-size: 1.05rem;
+            margin-bottom: 15px;
+            color: #333;
         }
         pre {
             background: #1e1e1e;
@@ -52,10 +55,19 @@
             overflow-x: auto;
             color: #eee;
         }
+        .disclaimer {
+            background: #fff3cd;
+            padding: 12px;
+            border-left: 5px solid #e0b400;
+            border-radius: 6px;
+            margin-top: 15px;
+            font-size: 0.95rem;
+        }
         footer {
             text-align: center;
             padding: 20px;
             color: #555;
+            margin-top: 30px;
         }
     </style>
 </head>
@@ -64,14 +76,37 @@
 
 <header>
     <h1>D1 Football — Play Detection Project</h1>
-    <p>Tracking Data • Changepoints • Clustering </p>
+    <p>Velocity Segmentation • Change-Point Detection • Clustering</p>
 </header>
 
 <div class="container">
 
+    <h2>Project Overview</h2>
+    <p>
+        This project builds a complete analytics pipeline for NCAA D1 football athlete tracking data.  
+        The goal is to automatically identify individual plays, characterize movement intensity, detect 
+        structural changes in velocity profiles, and group similar movement patterns.
+    </p>
+
+    <div class="disclaimer">
+        <strong>Confidentiality Notice:</strong><br>
+        Due to NCAA Division 1 data security policies, raw tracking datasets, velocity distributions, 
+        and athlete-identifying information cannot be displayed. All code examples shown below operate 
+        on anonymized or synthetic structures for demonstration.
+    </div>
+
     <h2>1. Peak-Based Play Segmentation</h2>
-    <pre><code class="language-python">
-def detect_play_segments(df, high_thresh=2.0, low_thresh=0.5,min_duration=0.5, pause_time_limit=1.5):
+    <p class="section-desc">
+        This function identifies play boundaries using velocity peaks, then expands each segment while 
+        allowing for small pauses. It forms the backbone of play detection.
+    </p>
+
+<pre><code class="language-python">
+def detect_play_segments(df, high_vel=2.0, low_vel=0.5, min_duration=0.5, max_pause=1.5):
+    """
+    Detect play intervals based on velocity peaks and expanded boundaries.
+    """
+
     df = df.sort_values("time").reset_index(drop=True)
     segments = []
     i = 0
@@ -79,37 +114,36 @@ def detect_play_segments(df, high_thresh=2.0, low_thresh=0.5,min_duration=0.5, p
     while i < len(df):
         v = df.loc[i, "velocity"]
 
-        # Detect start of a peak
-        if v >= high_thresh:
+        # Detect start of velocity peak
+        if v >= high_vel:
             peak_start = i
-            while i < len(df) and df.loc[i, "velocity"] >= high_thresh:
+            while i < len(df) and df.loc[i, "velocity"] >= high_vel:
                 i += 1
             peak_end = i - 1
 
-            # Expand left
+            # Expand left/downward
             start_idx = peak_start
-            while start_idx > 0 and df.loc[start_idx, "velocity"] > low_thresh:
+            while start_idx > 0 and df.loc[start_idx, "velocity"] > low_vel:
                 start_idx -= 1
 
-            # Expand right
+            # Expand right/upward
             end_idx = peak_end
-            pause_time = 0
+            pause = 0
 
             while end_idx < len(df) - 1:
                 next_v = df.loc[end_idx + 1, "velocity"]
                 dt = df.loc[end_idx + 1, "time"] - df.loc[end_idx, "time"]
 
-                if next_v > low_thresh:
-                    pause_time = 0
+                if next_v > low_vel:
+                    pause = 0
                     end_idx += 1
                 else:
-                    pause_time += dt
-                    if pause_time <= pause_time_limit:
+                    pause += dt
+                    if pause <= max_pause:
                         end_idx += 1
                     else:
                         break
 
-            # Store segment
             seg_start = df.loc[start_idx, "time"]
             seg_end = df.loc[end_idx, "time"]
             duration = seg_end - seg_start
@@ -122,111 +156,138 @@ def detect_play_segments(df, high_thresh=2.0, low_thresh=0.5,min_duration=0.5, p
             i += 1
 
     return segments
-    </code></pre>
+</code></pre>
 
-    <hr>
+    <h2>2. Abrupt Movement Change Detection</h2>
+    <p class="section-desc">
+        Identifies sudden changes in velocity or position that often align with transitions, cuts, 
+        and start/stop events. Used to refine play boundaries.
+    </p>
 
-    <h2>2. Abrupt Movement Detection</h2>
-    <pre><code class="language-python">
-def abrupt_changes(DataF, percent_change, max_time_interval):
-    abs_change_vel = abs(DataF['v'].diff())
-    abs_change_x = abs(DataF['x'].diff())
-    abs_change_y = abs(DataF['y'].diff())
-    
-    change_thresh_v = (DataF['v'].max() - DataF['v'].min()) * percent_change
-    change_thresh_x = (DataF['x'].max() - DataF['x'].min()) * percent_change
-    change_thresh_y = (DataF['y'].max() - DataF['y'].min()) * percent_change
-    
-    abrupt = pd.Series(False, index=DataF.index)
-    
-    for i in range(1, len(DataF)):
-        if (
-            abs_change_vel.iloc[i] >= change_thresh_v or
-            abs_change_x.iloc[i] >= change_thresh_x or
-            abs_change_y.iloc[i] >= change_thresh_y
-        ):
+<pre><code class="language-python">
+def detect_abrupt_changes(df, pct=0.20, suppress_window=3):
+    """
+    Detect abrupt changes in velocity or XY position.
+    """
+
+    dv = df['velocity'].diff().abs()
+    dx = df['x'].diff().abs()
+    dy = df['y'].diff().abs()
+
+    thresh_v = dv.max() * pct
+    thresh_x = dx.max() * pct
+    thresh_y = dy.max() * pct
+
+    abrupt = pd.Series(False, index=df.index)
+
+    for i in range(1, len(df)):
+        if (dv.iloc[i] >= thresh_v or
+            dx.iloc[i] >= thresh_x or
+            dy.iloc[i] >= thresh_y):
+
             abrupt.iloc[i] = True
-            for j in range(1, max_time_interval + 1):
-                if i + j < len(DataF):
-                    abrupt.iloc[i + j] = False
+
+            # Suppress subsequent points so we don't double-count
+            for k in range(1, suppress_window + 1):
+                if i + k < len(df):
+                    abrupt.iloc[i + k] = False
 
     return abrupt
-    </code></pre>
+</code></pre>
 
-    <hr>
 
-    <h2>3. IntervalTree Matching of Practice Periods</h2>
-    <pre><code class="language-python">
+    <h2>3. Mapping Plays to Practice Periods (IntervalTree)</h2>
+    <p class="section-desc">
+        Each athlete’s play is matched to coaching-defined practice periods using an efficient 
+        interval tree lookup. This enables context labeling and evaluation.
+    </p>
+
+<pre><code class="language-python">
 from intervaltree import IntervalTree
 
+# Build lookup trees
 trees = {}
-
-for athlete_id, group in periods.groupby('athlete_id'):
+for athlete, grp in periods.groupby('athlete_id'):
     tree = IntervalTree()
-    for idx, row in group.iterrows():
-        start = row['start_time']
-        end = row['end_time']
-        if start != end:
-            tree.addi(start, end, row['period_name'])
-    trees[athlete_id] = tree
+    for _, row in grp.iterrows():
+        if row['start_time'] != row['end_time']:
+            tree.addi(row['start_time'], row['end_time'], row['period_name'])
+    trees[athlete] = tree
 
-def lookup_period(row):
+def map_to_period(row):
     athlete = row['athlete_id']
-    time = row['time']
+    timestamp = row['time']
+
     if athlete in trees:
-        matches = trees[athlete][time]
+        matches = trees[athlete][timestamp]
         if matches:
             return list(matches)[0].data
+    
     return pd.NA
-    </code></pre>
+</code></pre>
 
-    <hr>
 
     <h2>4. Change-Point Detection (PELT)</h2>
-    <pre><code class="language-python">
-def detect_change_and_plot(data, label):
-    v_series = data['v'].values
-    algo = rpt.Pelt(model="rbf").fit(v_series)
-    change_points = algo.predict(pen=30)
+    <p class="section-desc">
+        PELT identifies structural changes in the velocity signal — typically acceleration, deceleration,  
+        or role transitions. Useful for validating segmentation quality.
+    </p>
+
+<pre><code class="language-python">
+def detect_change_points(df, label):
+    """
+    Detect velocity changepoints using the PELT algorithm.
+    """
+    vel = df['velocity'].values
+    algo = rpt.Pelt(model="rbf").fit(vel)
+    cps = algo.predict(pen=30)
 
     plt.figure(figsize=(12, 4))
-    plt.plot(data['time'], v_series, label=f'{label}')
-    for cp in change_points[:-1]:
-        plt.axvline(x=data['time'].iloc[cp], color='r', linestyle='--')
-    plt.title(f'Velocity changes detected during {label}')
+    plt.plot(df['time'], vel, label=label)
+
+    for cp in cps[:-1]:
+        plt.axvline(x=df['time'].iloc[cp], color='r', linestyle='--')
+
+    plt.title(f'Changepoints in Velocity — {label}')
     plt.xlabel('Time')
     plt.ylabel('Velocity')
-    plt.legend()
     plt.grid(True)
+    plt.legend()
     plt.show()
-    </code></pre>
+</code></pre>
 
-    <hr>
 
     <h2>5. Clustering Player Trajectories</h2>
-    <pre><code class="language-python">
+    <p class="section-desc">
+        Play trajectories are standardized, flattened, and clustered using K-Means to identify 
+        repeated movement patterns (routes, position habits, drill types).
+    </p>
+
+<pre><code class="language-python">
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 
-player_df = df_plot_filtered.copy()
+trajectory_list = []
 
-trajectories = []
 for start, end, _ in segments:
-    traj = player_df[(player_df['time'] >= start) & (player_df['time'] <= end)][['x', 'y']]
-    if len(traj) >= 5:
-        traj_uniform = traj.reset_index(drop=True).interpolate().iloc[:35].values.flatten()
-        trajectories.append(traj_uniform)
+    traj = df[(df['time'] >= start) & (df['time'] <= end)][['x', 'y']]
 
-X = np.vstack(trajectories)
+    if len(traj) >= 5:
+        traj_resampled = traj.reset_index(drop=True).interpolate().iloc[:35]
+        trajectory_list.append(traj_resampled.values.flatten())
+
+# Build clustering matrix
+X = np.vstack(trajectory_list)
 X = StandardScaler().fit_transform(X)
 
 kmeans = KMeans(n_clusters=3, random_state=0)
 labels = kmeans.fit_predict(X)
 
-for i, traj in enumerate(trajectories):
-    traj_reshaped = traj.reshape(-1, 2)
-    plt.plot(traj_reshaped[:, 0], traj_reshaped[:, 1], label=f"Cluster {labels[i]}", alpha=0.6)
-    </code></pre>
+# Visualization
+for i, traj in enumerate(trajectory_list):
+    coords = traj.reshape(-1, 2)
+    plt.plot(coords[:, 0], coords[:, 1], label=f"Cluster {labels[i]}", alpha=0.6)
+</code></pre>
 
 </div>
 
