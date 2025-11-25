@@ -1,18 +1,89 @@
-# D1 Football — Play Detection Project
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D1 Football — Play Detection Project</title>
 
-### Overview
-This project detects football plays from player-tracking data using:
-- abrupt movement change detection  
-- interval tree period matching  
-- change-point detection (PELT algorithm)  
-- K-Means clustering of trajectories  
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
----
+    <!-- Syntax Highlighting -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 
-## 1. Abrupt Movement Detection (Python)
+    <style>
+        body {
+            font-family: Inter, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f6fa;
+            color: #222;
+        }
+        header {
+            background: #0b1d3a;
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.3rem;
+            font-weight: 700;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            margin-top: 40px;
+            font-size: 1.6rem;
+            color: #0b1d3a;
+        }
+        pre {
+            background: #1e1e1e;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            color: #eee;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #555;
+        }
+    </style>
+</head>
 
-```python
-# Abrupt velocity + position changes
+<body>
+
+<header>
+    <h1>D1 Football — Play Detection Project</h1>
+    <p>Tracking Data • Changepoints • Clustering • Sports Science</p>
+</header>
+
+<div class="container">
+
+    <h2>Overview</h2>
+    <p>
+        This project detects football plays from player-tracking data using:
+    </p>
+    <ul>
+        <li>Abrupt movement change detection</li>
+        <li>Interval tree period matching</li>
+        <li>Change-point detection (PELT algorithm)</li>
+        <li>K-Means clustering of player movement trajectories</li>
+    </ul>
+
+    <hr>
+
+    <h2>1. Abrupt Movement Detection (Python)</h2>
+    <pre><code class="language-python">
 def abrupt_changes(DataF, percent_change, max_time_interval):
     abs_change_vel = abs(DataF['v'].diff())
     abs_change_x = abs(DataF['x'].diff())
@@ -36,9 +107,12 @@ def abrupt_changes(DataF, percent_change, max_time_interval):
                     abrupt.iloc[i + j] = False
 
     return abrupt
----
-## 2. IntervalTree Matching of Practice Periods
+    </code></pre>
 
+    <hr>
+
+    <h2>2. IntervalTree Matching of Practice Periods</h2>
+    <pre><code class="language-python">
 from intervaltree import IntervalTree
 
 trees = {}
@@ -60,10 +134,12 @@ def lookup_period(row):
         if matches:
             return list(matches)[0].data
     return pd.NA
----
+    </code></pre>
 
-## 3. Change-Point Detection (PELT)
+    <hr>
 
+    <h2>3. Change-Point Detection (PELT)</h2>
+    <pre><code class="language-python">
 def detect_change_and_plot(data, label):
     v_series = data['v'].values
     algo = rpt.Pelt(model="rbf").fit(v_series)
@@ -79,11 +155,12 @@ def detect_change_and_plot(data, label):
     plt.legend()
     plt.grid(True)
     plt.show()
+    </code></pre>
 
----
+    <hr>
 
-## 4. Clustering Player Trajectories
-
+    <h2>4. Clustering Player Trajectories</h2>
+    <pre><code class="language-python">
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 
@@ -105,5 +182,15 @@ labels = kmeans.fit_predict(X)
 for i, traj in enumerate(trajectories):
     traj_reshaped = traj.reshape(-1, 2)
     plt.plot(traj_reshaped[:, 0], traj_reshaped[:, 1], label=f"Cluster {labels[i]}", alpha=0.6)
+    </code></pre>
 
+</div>
 
+<footer>
+    © 2025 | Data Science Portfolio — Kailani Wang
+</footer>
+
+<script>hljs.highlightAll();</script>
+
+</body>
+</html>
