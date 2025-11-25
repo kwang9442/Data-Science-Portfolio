@@ -1,10 +1,158 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Kailani Wang – Data Science Portfolio</title>
-  </head>
-  <body>
-    <h1>Hello! I'm Kailani Wang</h1>
-    <p>This is my data science portfolio.</p>
-  </body>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kailani Wang — Data Science Portfolio</title>
+  <meta name="description" content="Kailani Wang — data science & sports analytics portfolio" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--muted:#94a3b8;--accent:#7c3aed;--glass:rgba(255,255,255,0.03)}
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial;color:#e6eef8;background:linear-gradient(180deg,#071028 0%, #071a2a 100%)}
+    .container{max-width:1100px;margin:36px auto;padding:28px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .avatar{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#06b6d4);display:flex;align-items:center;justify-content:center;font-weight:700;color:white}
+    h1{margin:0;font-size:1.4rem}
+    p.lead{margin:6px 0 0;color:var(--muted)}
+    nav a{color:var(--muted);text-decoration:none;margin-left:18px}
+    .hero{display:grid;grid-template-columns:1fr 360px;gap:20px;margin-top:28px}
+    .card{background:var(--card);padding:18px;border-radius:12px;box-shadow:0 6px 24px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.02)}
+    .skills{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+    .tag{background:var(--glass);padding:6px 10px;border-radius:999px;color:var(--muted);font-size:0.85rem}
+    .projects{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:18px}
+    .project-card{padding:14px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border:1px solid rgba(255,255,255,0.02)}
+    .project-card h3{margin:0 0 6px}
+    .project-card p{margin:0;color:var(--muted);font-size:0.95rem}
+    .project-links{margin-top:10px;display:flex;gap:8px}
+    .btn{display:inline-block;padding:8px 12px;border-radius:10px;text-decoration:none;font-weight:600}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+    .btn-primary{background:var(--accent);color:white}
+    pre{max-height:220px;overflow:auto;border-radius:8px;padding:12px;background:#071224;border:1px solid rgba(255,255,255,0.03)}
+    footer{margin-top:28px;color:var(--muted);font-size:0.9rem;text-align:center}
+    @media (max-width:880px){.hero{grid-template-columns:1fr}nav a{display:none}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="avatar">KW</div>
+        <div>
+          <h1>Kailani Wang</h1>
+          <p class="lead">Data Scientist • Sports Analytics • Machine Learning</p>
+        </div>
+      </div>
+      <nav>
+        <a href="#projects">Projects</a>
+        <a href="#resume">Resume</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="card about">
+        <h2>About</h2>
+        <p>I build reproducible analyses and models that answer clear questions. I focus on sports performance and player-tracking data.</p>
+
+        <div class="skills">
+          <span class="tag">Python</span>
+          <span class="tag">Pandas</span>
+          <span class="tag">scikit-learn</span>
+          <span class="tag">SQL</span>
+          <span class="tag">Jupyter</span>
+          <span class="tag">Git</span>
+        </div>
+
+        <hr style="margin:14px 0 10px;border-color:rgba(255,255,255,0.03)"/>
+        <h3>Quick code sample</h3>
+        <p style="color:var(--muted);margin:6px 0 8px;font-size:0.95rem">Example: train/test split and RandomForest.</p>
+
+        <pre><code># Load CSV
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+
+X = pd.read_csv('data/features.csv')
+y = X.pop('target')
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+clf = RandomForestClassifier(n_estimators=200, random_state=42)
+clf.fit(X_train, y_train)
+print('test accuracy', clf.score(X_test, y_test))</code></pre>
+
+        <div style="margin-top:10px">
+          <a class="btn btn-primary" href="#projects">See Projects</a>
+          <a class="btn btn-ghost" href="https://github.com/YOUR_USERNAME" target="_blank" rel="noopener">View GitHub</a>
+        </div>
+      </div>
+
+      <aside class="card" style="height:100%">
+        <h3>Resume</h3>
+        <p style="color:var(--muted)">Download my one-page resume or view a detailed PDF.</p>
+        <a class="btn btn-primary" href="Kailani_Wang_Resume.pdf" download>Download PDF</a>
+        <hr style="margin:14px 0 10px;border-color:rgba(255,255,255,0.03)"/>
+        <h3>Contact</h3>
+        <p style="color:var(--muted)">kailani.email@example.com</p>
+        <p style="color:var(--muted)">San Francisco, CA</p>
+      </aside>
+    </section>
+
+    <section id="projects" style="margin-top:22px">
+      <h2 style="margin-bottom:8px">Selected Projects</h2>
+      <div class="projects">
+
+        <article class="project-card">
+          <h3>Backcountry Ski Risk Model</h3>
+          <p>Prediction model for avalanche risk with feature engineering and interactive maps.</p>
+          <div class="project-links">
+            <a class="btn btn-ghost" href="https://github.com/YOUR_USERNAME/backcountry-ski" target="_blank">Code</a>
+            <a class="btn btn-ghost" href="#" target="_blank">Notebook</a>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <h3>Player Tracking Analytics</h3>
+          <p>Processing player tracking data, feature matrices, and clustering for play detection.</p>
+          <div class="project-links">
+            <a class="btn btn-ghost" href="https://github.com/YOUR_USERNAME/player-tracking" target="_blank">Code</a>
+            <a class="btn btn-ghost" href="#" target="_blank">Notebook</a>
+          </div>
+        </article>
+
+      </div>
+
+      <div style="margin-top:14px" class="card">
+        <h3>Full Project Write-up</h3>
+        <p style="color:var(--muted)">Link project -> dataset -> notebook -> how to run. Keep README short and reproducible.</p>
+      </div>
+    </section>
+
+    <section id="resume" style="margin-top:20px">
+      <div class="card">
+        <h2>Resume & Experience</h2>
+        <p style="color:var(--muted)">Short highlights and role bullets.</p>
+        <ul style="color:var(--muted)">
+          <li><strong>Intern</strong> — University of Oregon D1 Sports Science Program (Apr 2025 — Present)</li>
+          <li><strong>Research Intern</strong> — Example Lab (2024)</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="contact" style="margin-top:20px">
+      <div class="card">
+        <h2>Get in touch</h2>
+        <p style="color:var(--muted)">Email: <a href="mailto:kailani.email@example.com">kailani.email@example.com</a></p>
+      </div>
+    </section>
+
+    <footer>
+      Built with ❤️ — deploy on GitHub Pages or Netlify
+    </footer>
+
+  </div>
+</body>
 </html>
+
