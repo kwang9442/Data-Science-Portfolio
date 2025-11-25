@@ -64,7 +64,7 @@
 
 <header>
     <h1>D1 Football — Play Detection Project</h1>
-    <p>Tracking Data • Changepoints • Clustering • Sports Science</p>
+    <p>Tracking Data • Changepoints • Clustering </p>
 </header>
 
 <div class="container">
@@ -74,6 +74,7 @@
         This project detects football plays from player-tracking data using:
     </p>
     <ul>
+        <li>Peak-Based Play Segmentation</li>
         <li>Abrupt movement change detection</li>
         <li>Interval tree period matching</li>
         <li>Change-point detection (PELT algorithm)</li>
@@ -82,7 +83,64 @@
 
     <hr>
 
-    <h2>1. Abrupt Movement Detection (Python)</h2>
+    <h2>1. Peak-Based Play Segmentation</h2>
+    <pre><code class="language-python">
+def detect_play_segments(df, high_thresh=2.0, low_thresh=0.5,min_duration=0.5, pause_time_limit=1.5):
+    df = df.sort_values("time").reset_index(drop=True)
+    segments = []
+    i = 0
+
+    while i < len(df):
+        v = df.loc[i, "velocity"]
+
+        # Detect start of a peak
+        if v >= high_thresh:
+            peak_start = i
+            while i < len(df) and df.loc[i, "velocity"] >= high_thresh:
+                i += 1
+            peak_end = i - 1
+
+            # Expand left
+            start_idx = peak_start
+            while start_idx > 0 and df.loc[start_idx, "velocity"] > low_thresh:
+                start_idx -= 1
+
+            # Expand right
+            end_idx = peak_end
+            pause_time = 0
+
+            while end_idx < len(df) - 1:
+                next_v = df.loc[end_idx + 1, "velocity"]
+                dt = df.loc[end_idx + 1, "time"] - df.loc[end_idx, "time"]
+
+                if next_v > low_thresh:
+                    pause_time = 0
+                    end_idx += 1
+                else:
+                    pause_time += dt
+                    if pause_time <= pause_time_limit:
+                        end_idx += 1
+                    else:
+                        break
+
+            # Store segment
+            seg_start = df.loc[start_idx, "time"]
+            seg_end = df.loc[end_idx, "time"]
+            duration = seg_end - seg_start
+
+            if duration >= min_duration:
+                segments.append((seg_start, seg_end, duration))
+
+            i = end_idx
+        else:
+            i += 1
+
+    return segments
+    </code></pre>
+
+    <hr>
+
+    <h2>2. Abrupt Movement Detection</h2>
     <pre><code class="language-python">
 def abrupt_changes(DataF, percent_change, max_time_interval):
     abs_change_vel = abs(DataF['v'].diff())
@@ -111,7 +169,7 @@ def abrupt_changes(DataF, percent_change, max_time_interval):
 
     <hr>
 
-    <h2>2. IntervalTree Matching of Practice Periods</h2>
+    <h2>3. IntervalTree Matching of Practice Periods</h2>
     <pre><code class="language-python">
 from intervaltree import IntervalTree
 
@@ -138,7 +196,7 @@ def lookup_period(row):
 
     <hr>
 
-    <h2>3. Change-Point Detection (PELT)</h2>
+    <h2>4. Change-Point Detection (PELT)</h2>
     <pre><code class="language-python">
 def detect_change_and_plot(data, label):
     v_series = data['v'].values
@@ -159,7 +217,7 @@ def detect_change_and_plot(data, label):
 
     <hr>
 
-    <h2>4. Clustering Player Trajectories</h2>
+    <h2>5. Clustering Player Trajectories</h2>
     <pre><code class="language-python">
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
