@@ -69,20 +69,6 @@
 
 <div class="container">
 
-    <h2>Overview</h2>
-    <p>
-        This project detects football plays from player-tracking data using:
-    </p>
-    <ul>
-        <li>Peak-Based Play Segmentation</li>
-        <li>Abrupt movement change detection</li>
-        <li>Interval tree period matching</li>
-        <li>Change-point detection (PELT algorithm)</li>
-        <li>K-Means clustering of player movement trajectories</li>
-    </ul>
-
-    <hr>
-
     <h2>1. Peak-Based Play Segmentation</h2>
     <pre><code class="language-python">
 def detect_play_segments(df, high_thresh=2.0, low_thresh=0.5,min_duration=0.5, pause_time_limit=1.5):
