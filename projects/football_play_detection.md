@@ -81,20 +81,6 @@
 
 <div class="container">
 
-    <h2>Project Overview</h2>
-    <p>
-        This project builds a complete analytics pipeline for NCAA D1 football athlete tracking data.  
-        The goal is to automatically identify individual plays, characterize movement intensity, detect 
-        structural changes in velocity profiles, and group similar movement patterns.
-    </p>
-
-    <div class="disclaimer">
-        <strong>Confidentiality Notice:</strong><br>
-        Due to NCAA Division 1 data security policies, raw tracking datasets, velocity distributions, 
-        and athlete-identifying information cannot be displayed. All code examples shown below operate 
-        on anonymized or synthetic structures for demonstration.
-    </div>
-
     <h2>1. Peak-Based Play Segmentation</h2>
     <p class="section-desc">
         This function identifies play boundaries using velocity peaks, then expands each segment while 
