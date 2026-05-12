@@ -140,9 +140,9 @@
         I computed velocity change (dv) as the primary signal for detecting movement intensity shifts.
     </p>
 
-    <pre class = "red-code">
+    <pre><code class="language-python">
 df['dv'] = df['v'].diff().abs()
-    </pre>
+    </code></pre>
 
     <!-- PLAY DETECTION -->
     <h2>3. Play Detection Engine</h2>
