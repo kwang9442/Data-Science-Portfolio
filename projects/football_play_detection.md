@@ -60,9 +60,8 @@
             overflow-x: auto;
         }
 
-        /* ✅ ONLY CHANGE: make code text red */
         pre code {
-            color: red !important;
+            color: blue;
         }
 
         .note {
@@ -151,34 +150,34 @@ df['dv'] = df['v'].diff().abs()
         Plays are defined as continuous periods of high-intensity movement separated by low-movement phases.
     </p>
 
-    <pre>
+    <pre><code>
 if v >= high_thresh:
     peak_start = i
 
 while next_v > low_thresh:
     end_idx += 1
-    </pre>
+    </code></pre>
 
     <h2>4. Structural Validation (Change-Point Detection)</h2>
 
-    <pre>
+    <pre><code>
 algo = rpt.Pelt(model="rbf").fit(vel)
 cps = algo.predict(pen=30)
-    </pre>
+    </code></pre>
 
     <h2>5. Contextual Mapping (Drill & Practice Segments)</h2>
 
-    <pre>
+    <pre><code>
 tree.addi(start, end, period_name)
 matches = trees[athlete][time]
-    </pre>
+    </code></pre>
 
     <h2>6. Movement Pattern Clustering</h2>
 
-    <pre>
+    <pre><code>
 kmeans = KMeans(n_clusters=3, random_state=42)
 labels = kmeans.fit_predict(X)
-    </pre>
+    </code></pre>
 
     <h2>Final Output</h2>
 
