@@ -194,9 +194,12 @@ change_points = algo.predict(pen=30)
 </code></pre>
 
 <p>
-    This allowed cross-validation between heuristic play detection and statistically inferred motion changes,
-    improving segmentation reliability.
+    This allowed cross-validation between heuristic play detection and statistically inferred motion changes,improving segmentation reliability. Statistical change-point detection was applied to player velocity signals using the PELT algorithm. Red dashed lines indicate detected structural shifts in movement intensity, helping validate play segmentation boundaries.
 </p>
+
+<div style="text-align: center;">
+        <img src="../images/Detected-00A-Flex.png" alt="Detected Velocity 1 Drill"  width="600">
+</div>
 
     <h2>5. Interval Tree Based Segmentation</h2>
 
