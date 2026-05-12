@@ -51,6 +51,9 @@
             border-radius: 6px;
             margin-top: 10px;
         }
+        pre, pre code {
+            opacity: 1 !important;
+        }
 
         pre {
             background: #1e1e1e;
@@ -58,11 +61,14 @@
             padding: 12px;
             border-radius: 8px;
             overflow-x: auto;
+            opacity: 1;
         }
+        
         pre code {
-        color: #eee;
-        background: transparent;
-    }
+            color: #eee;
+            background: transparent;
+            opacity: 1;
+        }
 
         .note {
             background: #fff3cd;
