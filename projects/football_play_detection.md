@@ -144,7 +144,7 @@ df['dv'] = df['v'].diff().abs()
         Green points represent movement events that exceeded adaptive percentile thresholds.
     </p>
 
-    <img src="../images/Velocity-Changes-00A-Flex.png" alt="Velocity Changes for One Drill">
+    <img src="../images/Velocity-Changes-00A-Flex.png" alt="Velocity Changes for One Drill"  width="600">
 
     <h2>3. Play Detection Engine (Time-Series Segmentation)</h2>
 
