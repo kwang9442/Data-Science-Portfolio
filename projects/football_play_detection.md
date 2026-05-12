@@ -177,8 +177,9 @@ df['dv'] = df['v'].diff().abs()
             This approach ensures that each detected segment shows a physically meaningful play rather than short noise spikes in sensor data. Detected play segments are highlighted in red. Plays were identified by locating sustained high-velocity movement periods bounded by lower activity thresholds and pause-tolerant segmentation rules.
     </p>
 
-    <div style="text-align: center;">
-        <img src="../images/Detected-High-Peaks.png" alt="Velocity Changes for One Drill"  width="600">
+    <div style="display: flex; justify-content: center; gap: 20px;">
+        <img src="../images/Detected-High-Peaks.png" style="width: 45%;" alt="Velocity Changes for One Drill">
+        <img src="../images/Specific-Detection.png" style="width: 45%;" alt="Specific Detection">
     </div>
 
    <h2>4. Change-Point Detection (Signal Validation)</h2>
