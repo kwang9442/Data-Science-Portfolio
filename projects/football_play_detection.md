@@ -236,7 +236,7 @@ labels = kmeans.fit_predict(X)
 </ul>
 
 <div style="text-align: center;">
-        <img src="../images/Movement-Cluster.png" alt="Movement Clusters"  width="600">
+        <img src="../images/Movement-Cluster.png" alt="Movement Clusters"  width="540">
 </div>
    <h2>What This Project Demonstrates</h2>
 
