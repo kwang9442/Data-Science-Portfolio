@@ -138,7 +138,7 @@
 df['dv'] = df['v'].diff().abs()
     </code></pre>
 
-    <img src="images/Velocity-Changes-00A-Flex.png" alt="Velocity Changes for One Drill">
+    <img src="../images/Velocity-Changes-00A-Flex.png" alt="Velocity Changes for One Drill">
 
     <h2>3. Play Detection Engine (Time-Series Segmentation)</h2>
 
