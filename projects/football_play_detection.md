@@ -103,12 +103,6 @@
         play segmentation, event detection, and clustering of movement patterns.
     </p>
 
-    <div class="note">
-        <b>Data Note:</b> Due to NCAA data privacy restrictions, raw datasets, athlete identifiers,
-        and full implementation details cannot be publicly shared. This project reflects a production-level
-        analytics pipeline used in performance analysis workflows.
-    </div>
-
     <h2>End-to-End Pipeline</h2>
 
     <div class="pipeline">
