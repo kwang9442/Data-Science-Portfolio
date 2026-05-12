@@ -145,7 +145,7 @@ df['dv'] = df['v'].diff().abs()
     </p>
 
 <div style="text-align: center;">
-        <img src="../images/Velocity-Changes-00A-Flex.png" alt="Velocity Changes for One Drill"  width="600">
+        <img src="../images/Velocity-Changes-00A-Flex.png" alt="Detected Plays Intervals"  width="600">
 </div>
 
     <h2>3. Play Detection Engine (Time-Series Segmentation)</h2>
@@ -174,8 +174,12 @@ df['dv'] = df['v'].diff().abs()
     </code></pre>
     
     <p>
-        This approach ensures that each detected segment shows a physically meaningful play rather than short noise spikes in sensor data.
+            This approach ensures that each detected segment shows a physically meaningful play rather than short noise spikes in sensor data. Detected play segments are highlighted in red. Plays were identified by locating sustained high-velocity movement periods bounded by lower activity thresholds and pause-tolerant segmentation rules.
     </p>
+
+    <div style="text-align: center;">
+        <img src="../images/Detected-High-Peaks.png" alt="Velocity Changes for One Drill"  width="600">
+    </div>
 
    <h2>4. Change-Point Detection (Signal Validation)</h2>
 
