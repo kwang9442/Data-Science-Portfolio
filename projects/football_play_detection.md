@@ -52,7 +52,7 @@
             margin-top: 10px;
         }
         pre, pre code {
-            opacity: 1 !important;
+            color: red;
         }
 
         pre {
@@ -65,9 +65,7 @@
         }
         
         pre code {
-            color: #eee;
-            background: transparent;
-            opacity: 1;
+            color: red;
         }
         .code-block pre {
             background: #1e1e1e;
@@ -154,12 +152,10 @@
     <p>
         I computed velocity change (dv) as the primary signal for detecting movement intensity shifts.
     </p>
-
-    <div class="code-block">
-    <pre><code>
+    
+    <pre>
     df['dv'] = df['v'].diff().abs()
-    </code></pre>
-    </div>
+    </pre>
 
     <!-- PLAY DETECTION -->
     <h2>3. Play Detection Engine</h2>
