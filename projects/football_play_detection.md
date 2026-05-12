@@ -61,7 +61,7 @@
         }
 
         pre code {
-            color: #7bd88f;
+            color: #7aa2f7;
         }
 
         .note {
