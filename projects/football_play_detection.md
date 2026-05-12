@@ -138,13 +138,13 @@
 df['dv'] = df['v'].diff().abs()
     </code></pre>
 
-    <img src="../images/Velocity-Changes-00A-Flex.png" alt="Velocity Changes for One Drill">
-
     <p>
         This distribution was tracking one player across the time interval of one drill ran at practice. Velocity change signals (dv) were computed from raw GPS velocity data to identify meaningful movement transitions.
         Threshold-based filtering was used to isolate high-intensity changes while reducing noise from small fluctuations.
         Green points represent movement events that exceeded adaptive percentile thresholds.
     </p>
+
+    <img src="../images/Velocity-Changes-00A-Flex.png" alt="Velocity Changes for One Drill">
 
     <h2>3. Play Detection Engine (Time-Series Segmentation)</h2>
 
