@@ -184,14 +184,19 @@ change_points = algo.predict(pen=30)
     improving segmentation reliability.
 </p>
 
-    <h2>5. Contextual Mapping (Drill & Practice Segments)</h2>
+    <h2>5. Interval Tree Based Segmentation</h2>
 
+<p>
+    Interval trees were used to efficiently map GPS timestamps to drill and practice periods,
+    enabling fast lookup of contextual metadata for each athlete movement event.
+</p>
+    
     <pre><code>
-tree.addi(start, end, period_name)
-matches = trees[athlete][time]
+    tree.addi(start, end, period_name)
+    matches = trees[athlete][time]
     </code></pre>
 
-    <h2>5. Movement Pattern Clustering</h2>
+    <h2>6. Movement Pattern Clustering</h2>
 
 <p>
     To analyze behavioral patterns across time windows, I aggregated 5-second movement chunks and extracted features such as:
@@ -215,12 +220,11 @@ labels = kmeans.fit_predict(X)
    <h2>What This Project Demonstrates</h2>
 
 <ul>
-    <li>End-to-end time-series data engineering pipeline</li>
-    <li>Feature engineering from raw sensor (GPS) data</li>
-    <li>Rule-based + statistical hybrid modeling approaches</li>
-    <li>Change-point detection in real-world noisy signals</li>
-    <li>Unsupervised learning (KMeans clustering) on behavioral data</li>
-    <li>Sports analytics problem formulation and decomposition</li>
+    <li>Built a full pipeline for processing football tracking data.</li>
+    <li>Created movement features from raw GPS sensor data.</li>
+    <li>Combined threshold methods with statistical modeling for play detection.</li>
+    <li>Applied change-point detection to noisy player movement signals.</li>
+    <li>Used KMeans clustering to identify movement and behavior patterns.</li>
 </ul>
 
 </div>
