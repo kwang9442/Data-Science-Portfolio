@@ -226,7 +226,7 @@ labels = kmeans.fit_predict(X)
 </code></pre>
 
 <p>
-    This made three interpretable movement states:
+    Five-second movement windows were clustered using KMeans based on average velocity change and frequency of high-intensity movement events. This made three interpretable movement states:
 </p>
 
 <ul>
@@ -234,6 +234,10 @@ labels = kmeans.fit_predict(X)
     <li><b>Moderate Activity:</b> Repositioning and transitional movement</li>
     <li><b>High Activity:</b> Sprinting, cutting, and game-speed exertion</li>
 </ul>
+
+<div style="text-align: center;">
+        <img src="../images/Movement-Cluster.png" alt="Movement Clusters"  width="600">
+</div>
    <h2>What This Project Demonstrates</h2>
 
 <ul>
