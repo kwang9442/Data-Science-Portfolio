@@ -1,68 +1,75 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D1 Football — Play Detection Project</title>
+    <title>D1 Football — Tracking Data Analytics System</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 
     <style>
         body {
             font-family: Inter, sans-serif;
             margin: 0;
-            padding: 0;
             background: #f5f6fa;
             color: #222;
         }
+
         header {
             background: #0b1d3a;
             color: white;
             padding: 60px 20px;
             text-align: center;
         }
+
         header h1 {
             margin: 0;
-            font-size: 2.4rem;
+            font-size: 2.6rem;
         }
+
         .container {
-            max-width: 900px;
+            max-width: 950px;
             margin: 40px auto;
             background: white;
             padding: 40px;
             border-radius: 12px;
             box-shadow: 0 3px 10px rgba(0,0,0,0.1);
         }
+
         h2 {
             margin-top: 40px;
             color: #0b1d3a;
         }
-        .section-desc {
-            line-height: 1.6
-            color: #333;
+
+        p {
+            line-height: 1.6;
         }
+
+        .pipeline {
+            background: #f1f5f9;
+            padding: 15px;
+            border-left: 4px solid #0b1d3a;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+
         pre {
             background: #1e1e1e;
+            color: #eee;
             padding: 12px;
             border-radius: 8px;
             overflow-x: auto;
-            color: #eee;
         }
-        ul {
-            line-height:1.7;
-        }
-        
-        .disclaimer {
-            background: #f1f5f9;
+
+        .note {
+            background: #fff3cd;
             padding: 12px;
-            border-left: 4px solid #64748b;
+            border-left: 4px solid #e0b400;
             border-radius: 6px;
             margin-top: 20px;
             font-size: 0.95rem;
         }
+
         footer {
             text-align: center;
             padding: 20px;
@@ -74,212 +81,157 @@
 <body>
 
 <header>
-    <h1>D1 Football — Play Detection Project</h1>
-    <p>Play Segmentation • Movement Analytics • Clustering</p>
+    <h1>Football Tracking Data Analytics System</h1>
+    <p>GPS Tracking • Play Detection • Movement Modeling • Clustering</p>
 </header>
 
 <div class="container">
-    <h2>1. Peak-Based Play Segmentation</h2>
-    <p class="section-desc">
-        This function identifies play boundaries using velocity peaks, then expands each segment while 
-        allowing for small pauses. It forms the backbone of play detection.
+
+    <!-- INTRO -->
+    <h2>Project Overview</h2>
+
+    <p>
+        This project builds an end-to-end analytics system for NCAA Division I football GPS tracking data.
+        It transforms raw athlete movement data (x, y position + velocity over time) into structured “plays”
+        that can be used to analyze workload, movement intensity, and tactical behavior.
     </p>
 
-<pre><code class="language-python">
-def detect_play_segments(df, high_vel=2.0, low_vel=0.5, min_duration=0.5, max_pause=1.5):
-    """
-    Detect play intervals based on velocity peaks and expanded boundaries.
-    """
-
-    df = df.sort_values("time").reset_index(drop=True)
-    segments = []
-    i = 0
-
-    while i < len(df):
-        v = df.loc[i, "velocity"]
-
-        # Detect start of velocity peak
-        if v >= high_vel:
-            peak_start = i
-            while i < len(df) and df.loc[i, "velocity"] >= high_vel:
-                i += 1
-            peak_end = i - 1
-
-            # Expand left/downward
-            start_idx = peak_start
-            while start_idx > 0 and df.loc[start_idx, "velocity"] > low_vel:
-                start_idx -= 1
-
-            # Expand right/upward
-            end_idx = peak_end
-            pause = 0
-
-            while end_idx < len(df) - 1:
-                next_v = df.loc[end_idx + 1, "velocity"]
-                dt = df.loc[end_idx + 1, "time"] - df.loc[end_idx, "time"]
-
-                if next_v > low_vel:
-                    pause = 0
-                    end_idx += 1
-                else:
-                    pause += dt
-                    if pause <= max_pause:
-                        end_idx += 1
-                    else:
-                        break
-
-            seg_start = df.loc[start_idx, "time"]
-            seg_end = df.loc[end_idx, "time"]
-            duration = seg_end - seg_start
-
-            if duration >= min_duration:
-                segments.append((seg_start, seg_end, duration))
-
-            i = end_idx
-        else:
-            i += 1
-
-    return segments
-</code></pre>
-
-    <h2>2. Abrupt Movement Change Detection</h2>
-    <p class="section-desc">
-        Identifies sudden changes in velocity or position that often align with transitions, cuts, 
-        and start/stop events. Used to refine play boundaries.
+    <p>
+        Starting from raw sensor data, I built a full pipeline including data cleaning, signal processing,
+        play segmentation, event detection, and clustering of movement patterns.
     </p>
 
-<pre><code class="language-python">
-def detect_abrupt_changes(df, pct=0.20, suppress_window=3):
-    """
-    Detect abrupt changes in velocity or XY position.
-    """
+    <div class="note">
+        <b>Data Note:</b> Due to NCAA data privacy restrictions, raw datasets, athlete identifiers,
+        and full implementation details cannot be publicly shared. This project reflects a production-level
+        analytics pipeline used in performance analysis workflows.
+    </div>
 
-    dv = df['velocity'].diff().abs()
-    dx = df['x'].diff().abs()
-    dy = df['y'].diff().abs()
+    <!-- PIPELINE -->
+    <h2>End-to-End Pipeline</h2>
 
-    thresh_v = dv.max() * pct
-    thresh_x = dx.max() * pct
-    thresh_y = dy.max() * pct
+    <div class="pipeline">
+        Raw GPS Data → Cleaning & Filtering → Velocity Signal Processing → Play Detection → 
+        Change-Point Validation → Period Mapping → Trajectory Clustering → Output Plays
+    </div>
 
-    abrupt = pd.Series(False, index=df.index)
+    <!-- DATA CLEANING -->
+    <h2>1. Data Processing & Preparation</h2>
 
-    for i in range(1, len(df)):
-        if (dv.iloc[i] >= thresh_v or
-            dx.iloc[i] >= thresh_x or
-            dy.iloc[i] >= thresh_y):
-
-            abrupt.iloc[i] = True
-
-            # Suppress subsequent points so we don't double-count
-            for k in range(1, suppress_window + 1):
-                if i + k < len(df):
-                    abrupt.iloc[i + k] = False
-
-    return abrupt
-</code></pre>
-
-
-    <h2>3. Mapping Plays to Practice Periods (IntervalTree)</h2>
-    <p class="section-desc">
-        Each athlete’s play is matched to coaching-defined practice periods using an efficient 
-        interval tree lookup. This enables context labeling and evaluation.
+    <p>
+        The raw dataset consists of 100Hz GPS tracking data containing player position (x, y),
+        velocity, acceleration, and timestamps.
     </p>
 
-<pre><code class="language-python">
-from intervaltree import IntervalTree
-
-# Build lookup trees
-trees = {}
-for athlete, grp in periods.groupby('athlete_id'):
-    tree = IntervalTree()
-    for _, row in grp.iterrows():
-        if row['start_time'] != row['end_time']:
-            tree.addi(row['start_time'], row['end_time'], row['period_name'])
-    trees[athlete] = tree
-
-def map_to_period(row):
-    athlete = row['athlete_id']
-    timestamp = row['time']
-
-    if athlete in trees:
-        matches = trees[athlete][timestamp]
-        if matches:
-            return list(matches)[0].data
-    
-    return pd.NA
-</code></pre>
-
-
-    <h2>4. Change-Point Detection (PELT)</h2>
-    <p class="section-desc">
-        PELT identifies structural changes in the velocity signal — typically acceleration, deceleration,  
-        or role transitions. Useful for validating segmentation quality.
+    <p>
+        Preprocessing steps included:
     </p>
 
-<pre><code class="language-python">
-def detect_change_points(df, label):
-    """
-    Detect velocity changepoints using the PELT algorithm.
-    """
-    vel = df['velocity'].values
-    algo = rpt.Pelt(model="rbf").fit(vel)
-    cps = algo.predict(pen=30)
+    <ul>
+        <li>Filtering individual athletes from team tracking streams</li>
+        <li>Sorting and aligning time-series data</li>
+        <li>Handling missing velocity values</li>
+        <li>Standardizing timestamps across drills</li>
+    </ul>
 
-    plt.figure(figsize=(12, 4))
-    plt.plot(df['time'], vel, label=label)
+    <!-- SIGNAL -->
+    <h2>2. Movement Signal Processing</h2>
 
-    for cp in cps[:-1]:
-        plt.axvline(x=df['time'].iloc[cp], color='r', linestyle='--')
-
-    plt.title(f'Changepoints in Velocity — {label}')
-    plt.xlabel('Time')
-    plt.ylabel('Velocity')
-    plt.grid(True)
-    plt.legend()
-    plt.show()
-</code></pre>
-
-
-    <h2>5. Clustering Player Trajectories</h2>
-    <p class="section-desc">
-        Play trajectories are standardized, flattened, and clustered using K-Means to identify 
-        repeated movement patterns (routes, position habits, drill types).
+    <p>
+        I computed velocity change (dv) as the primary signal for detecting movement intensity shifts.
     </p>
 
-<pre><code class="language-python">
-from sklearn.cluster import KMeans
-from sklearn.preprocessing import StandardScaler
+    <pre>
+df['dv'] = df['v'].diff().abs()
+    </pre>
 
-trajectory_list = []
+    <!-- PLAY DETECTION -->
+    <h2>3. Play Detection Engine</h2>
 
-for start, end, _ in segments:
-    traj = df[(df['time'] >= start) & (df['time'] <= end)][['x', 'y']]
+    <p>
+        Plays are defined as continuous periods of high-intensity movement separated by low-movement phases.
+        A threshold-based system is used with expansion logic to capture full movement sequences.
+    </p>
 
-    if len(traj) >= 5:
-        traj_resampled = traj.reset_index(drop=True).interpolate().iloc[:35]
-        trajectory_list.append(traj_resampled.values.flatten())
+    <pre>
+if v >= high_thresh:
+    peak_start = i
 
-# Build clustering matrix
-X = np.vstack(trajectory_list)
-X = StandardScaler().fit_transform(X)
+while next_v > low_thresh:
+    end_idx += 1
+    </pre>
 
-kmeans = KMeans(n_clusters=3, random_state=0)
+    <p>
+        This ensures natural movement sequences are not split prematurely while still isolating meaningful play events.
+    </p>
+
+    <!-- CHANGE POINTS -->
+    <h2>4. Structural Validation (Change-Point Detection)</h2>
+
+    <p>
+        PELT change-point detection is used to validate whether detected plays align with structural shifts in movement intensity.
+    </p>
+
+    <pre>
+algo = rpt.Pelt(model="rbf").fit(vel)
+cps = algo.predict(pen=30)
+    </pre>
+
+    <!-- INTERVAL TREE -->
+    <h2>5. Contextual Mapping (Drill & Practice Segments)</h2>
+
+    <p>
+        Each detected play is mapped to coaching-defined periods using interval trees.
+        This allows performance to be analyzed within specific drills and practice contexts.
+    </p>
+
+    <pre>
+tree.addi(start, end, period_name)
+matches = trees[athlete][time]
+    </pre>
+
+    <!-- CLUSTERING -->
+    <h2>6. Movement Pattern Clustering</h2>
+
+    <p>
+        Plays are clustered using K-Means based on spatial movement (x, y trajectories)
+        to identify recurring behavioral patterns.
+    </p>
+
+    <pre>
+kmeans = KMeans(n_clusters=3, random_state=42)
 labels = kmeans.fit_predict(X)
+    </pre>
 
-# Visualization
-for i, traj in enumerate(trajectory_list):
-    coords = traj.reshape(-1, 2)
-    plt.plot(coords[:, 0], coords[:, 1], label=f"Cluster {labels[i]}", alpha=0.6)
-</code></pre>
+    <ul>
+        <li>Cluster 1: low-intensity recovery movement</li>
+        <li>Cluster 2: moderate repositioning phases</li>
+        <li>Cluster 3: high-intensity sprint/cut actions</li>
+    </ul>
+
+    <!-- OUTPUT -->
+    <h2>Final Output</h2>
+
+    <p>
+        The system outputs structured play-level data containing:
+    </p>
+
+    <ul>
+        <li>Play start and end times</li>
+        <li>Duration and intensity features</li>
+        <li>Athlete and drill context</li>
+        <li>Movement-based clustering labels</li>
+    </ul>
+
+    <p>
+        This enables downstream analysis of workload, performance trends, and movement efficiency across athletes and sessions.
+    </p>
 
 </div>
 
 <footer>
     © 2025 | Data Science Portfolio — Kailani Wang
 </footer>
-
-<script>hljs.highlightAll();</script>
 
 </body>
 </html>
