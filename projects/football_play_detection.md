@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -93,7 +92,7 @@
     <p>
         This project builds an end-to-end analytics system for NCAA Division I football GPS tracking data.
         It transforms raw athlete movement data (x, y position + velocity over time) into structured “plays”
-        that can be used to analyze workload, movement intensity, and tactical behavior.
+        that can be used to analyze workload, movement intensity, and behaviors.
     </p>
 
     <p>
@@ -119,8 +118,8 @@
     <h2>1. Data Processing & Preparation</h2>
 
     <p>
-        The raw dataset consists of 100Hz GPS tracking data containing player position (x, y),
-        velocity, acceleration, and timestamps.
+        The raw dataset consists of GPS tracking data containing player position (x, y),
+        velocity, acceleration, timestamps, etc.
     </p>
 
     <p>
@@ -141,7 +140,7 @@
         I computed velocity change (dv) as the primary signal for detecting movement intensity shifts.
     </p>
 
-    <pre>
+    <pre class = "red-code">
 df['dv'] = df['v'].diff().abs()
     </pre>
 
@@ -153,7 +152,7 @@ df['dv'] = df['v'].diff().abs()
         A threshold-based system is used with expansion logic to capture full movement sequences.
     </p>
 
-    <pre>
+    <pre class = "red-code">
 if v >= high_thresh:
     peak_start = i
 
@@ -172,7 +171,7 @@ while next_v > low_thresh:
         PELT change-point detection is used to validate whether detected plays align with structural shifts in movement intensity.
     </p>
 
-    <pre>
+    <pre class = "red-code">
 algo = rpt.Pelt(model="rbf").fit(vel)
 cps = algo.predict(pen=30)
     </pre>
@@ -185,7 +184,7 @@ cps = algo.predict(pen=30)
         This allows performance to be analyzed within specific drills and practice contexts.
     </p>
 
-    <pre>
+    <pre class = "red-code">
 tree.addi(start, end, period_name)
 matches = trees[athlete][time]
     </pre>
@@ -198,7 +197,7 @@ matches = trees[athlete][time]
         to identify recurring behavioral patterns.
     </p>
 
-    <pre>
+    <pre class = "red-code">
 kmeans = KMeans(n_clusters=3, random_state=42)
 labels = kmeans.fit_predict(X)
     </pre>
