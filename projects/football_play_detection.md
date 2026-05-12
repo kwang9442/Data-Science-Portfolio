@@ -107,7 +107,7 @@
 
     <div class="pipeline">
         Raw GPS Data → Cleaning & Filtering → Velocity Signal Processing → Play Detection → 
-        Change-Point Validation → Period Mapping → Trajectory Clustering → Output Plays
+        Change-Point Validation → Period Mapping → Trajectory Clustering (Ongoing) → Output Plays
     </div>
 
     <h2>1. Data Processing & Preperation</h2>
