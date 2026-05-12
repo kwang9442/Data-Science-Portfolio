@@ -116,7 +116,7 @@
         Change-Point Validation → Period Mapping → Trajectory Clustering → Output Plays
     </div>
 
-    <h2>1. Data Processing & Preparation</h2>
+    <h2>1. Data Processing & Preperation</h2>
 
     <p>
         The raw dataset consists of GPS tracking data containing player position (x, y),
@@ -130,40 +130,65 @@
     <ul>
         <li>Filtering individual athletes from team tracking streams</li>
         <li>Sorting and aligning time-series data</li>
-        <li>Handling missing velocity values</li>
+        <li>Handling missing or noisy velocity values</li>
         <li>Standardizing timestamps across drills</li>
     </ul>
 
     <h2>2. Movement Signal Processing</h2>
 
     <p>
-        I computed velocity change (dv) as the primary signal for detecting movement intensity shifts.
+        This velocity delta signal became a key feature for detecting transitions between movement states (rest → acceleration → active     play).
     </p>
 
     <pre><code>
 df['dv'] = df['v'].diff().abs()
     </code></pre>
 
-    <h2>3. Play Detection Engine</h2>
+    <h2>3. Play Detection Engine (Time-Series Segmentation)</h2>
 
     <p>
-        Plays are defined as continuous periods of high-intensity movement separated by low-movement phases.
+        A custom rule-based segmentation system was developed to detect discrete “plays” from continuous movement data.
+        A play is defined as a bounded time interval where player velocity exceeds a dynamic threshold and returns to baseline.
+    </p>
+    
+    <p>
+        The algorithm uses both:
+    </p>
+    
+    <ul>
+        <li>Velocity thresholding (high-intensity movement detection)</li>
+        <li>Temporal continuity constraints (preventing false splits)</li>
+        <li>Pause-time tolerance for directional changes</li>
+    </ul>
+    
+    <pre><code>
+    if v >= high_thresh:
+        peak_start = i
+    
+    while next_v > low_thresh:
+        end_idx += 1
+    </code></pre>
+    
+    <p>
+        This approach ensures that each detected segment represents a physically meaningful play rather than short noise spikes in sensor data.
     </p>
 
-    <pre><code>
-if v >= high_thresh:
-    peak_start = i
+   <h2>4. Change-Point Detection (Signal Validation)</h2>
 
-while next_v > low_thresh:
-    end_idx += 1
-    </code></pre>
+<p>
+    To validate rule-based segmentation, I implemented statistical change-point detection using
+    the PELT algorithm with an RBF kernel to detect structural shifts in velocity time-series data.
+</p>
 
-    <h2>4. Structural Validation (Change-Point Detection)</h2>
-
-    <pre><code>
+<pre><code>
 algo = rpt.Pelt(model="rbf").fit(vel)
-cps = algo.predict(pen=30)
-    </code></pre>
+change_points = algo.predict(pen=30)
+</code></pre>
+
+<p>
+    This allowed cross-validation between heuristic play detection and statistically inferred motion changes,
+    improving segmentation reliability.
+</p>
 
     <h2>5. Contextual Mapping (Drill & Practice Segments)</h2>
 
@@ -172,25 +197,37 @@ tree.addi(start, end, period_name)
 matches = trees[athlete][time]
     </code></pre>
 
-    <h2>6. Movement Pattern Clustering</h2>
+    <h2>5. Movement Pattern Clustering</h2>
 
-    <pre><code>
+<p>
+    To analyze behavioral patterns across time windows, I aggregated 5-second movement chunks and extracted features such as:
+    average velocity change and frequency of high-intensity movement events.
+</p>
+
+<pre><code>
 kmeans = KMeans(n_clusters=3, random_state=42)
 labels = kmeans.fit_predict(X)
-    </code></pre>
+</code></pre>
 
-    <h2>Final Output</h2>
+<p>
+    This produced three interpretable movement states:
+</p>
 
-    <p>
-        The system outputs structured play-level data containing:
-    </p>
+<ul>
+    <li><b>Low Activity:</b> Resting, walking, recovery phases</li>
+    <li><b>Moderate Activity:</b> Repositioning and transitional movement</li>
+    <li><b>High Activity:</b> Sprinting, cutting, and game-speed exertion</li>
+</ul>
+   <h2>What This Project Demonstrates</h2>
 
-    <ul>
-        <li>Play start and end times</li>
-        <li>Duration and intensity features</li>
-        <li>Athlete and drill context</li>
-        <li>Movement-based clustering labels</li>
-    </ul>
+<ul>
+    <li>End-to-end time-series data engineering pipeline</li>
+    <li>Feature engineering from raw sensor (GPS) data</li>
+    <li>Rule-based + statistical hybrid modeling approaches</li>
+    <li>Change-point detection in real-world noisy signals</li>
+    <li>Unsupervised learning (KMeans clustering) on behavioral data</li>
+    <li>Sports analytics problem formulation and decomposition</li>
+</ul>
 
 </div>
 
