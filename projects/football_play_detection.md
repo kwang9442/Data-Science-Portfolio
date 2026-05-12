@@ -51,9 +51,6 @@
             border-radius: 6px;
             margin-top: 10px;
         }
-        pre, pre code {
-            color: red;
-        }
 
         pre {
             background: #1e1e1e;
@@ -61,16 +58,11 @@
             padding: 12px;
             border-radius: 8px;
             overflow-x: auto;
-            opacity: 1;
         }
-        
+
+        /* ✅ ONLY CHANGE: make code text red */
         pre code {
-            color: red;
-        }
-        .code-block pre {
-            background: #1e1e1e;
-            color: #eee;
-            opacity: 1;
+            color: red !important;
         }
 
         .note {
@@ -99,7 +91,6 @@
 
 <div class="container">
 
-    <!-- INTRO -->
     <h2>Project Overview</h2>
 
     <p>
@@ -119,7 +110,6 @@
         analytics pipeline used in performance analysis workflows.
     </div>
 
-    <!-- PIPELINE -->
     <h2>End-to-End Pipeline</h2>
 
     <div class="pipeline">
@@ -127,7 +117,6 @@
         Change-Point Validation → Period Mapping → Trajectory Clustering → Output Plays
     </div>
 
-    <!-- DATA CLEANING -->
     <h2>1. Data Processing & Preparation</h2>
 
     <p>
@@ -146,23 +135,20 @@
         <li>Standardizing timestamps across drills</li>
     </ul>
 
-    <!-- SIGNAL -->
     <h2>2. Movement Signal Processing</h2>
 
     <p>
         I computed velocity change (dv) as the primary signal for detecting movement intensity shifts.
     </p>
-    
-    <pre>
-    df['dv'] = df['v'].diff().abs()
-    </pre>
 
-    <!-- PLAY DETECTION -->
+    <pre><code>
+df['dv'] = df['v'].diff().abs()
+    </code></pre>
+
     <h2>3. Play Detection Engine</h2>
 
     <p>
         Plays are defined as continuous periods of high-intensity movement separated by low-movement phases.
-        A threshold-based system is used with expansion logic to capture full movement sequences.
     </p>
 
     <pre>
@@ -173,55 +159,27 @@ while next_v > low_thresh:
     end_idx += 1
     </pre>
 
-    <p>
-        This ensures natural movement sequences are not split prematurely while still isolating meaningful play events.
-    </p>
-
-    <!-- CHANGE POINTS -->
     <h2>4. Structural Validation (Change-Point Detection)</h2>
-
-    <p>
-        PELT change-point detection is used to validate whether detected plays align with structural shifts in movement intensity.
-    </p>
 
     <pre>
 algo = rpt.Pelt(model="rbf").fit(vel)
 cps = algo.predict(pen=30)
     </pre>
 
-    <!-- INTERVAL TREE -->
     <h2>5. Contextual Mapping (Drill & Practice Segments)</h2>
-
-    <p>
-        Each detected play is mapped to coaching-defined periods using interval trees.
-        This allows performance to be analyzed within specific drills and practice contexts.
-    </p>
 
     <pre>
 tree.addi(start, end, period_name)
 matches = trees[athlete][time]
     </pre>
 
-    <!-- CLUSTERING -->
     <h2>6. Movement Pattern Clustering</h2>
-
-    <p>
-        Plays are clustered using K-Means based on spatial movement (x, y trajectories)
-        to identify recurring behavioral patterns.
-    </p>
 
     <pre>
 kmeans = KMeans(n_clusters=3, random_state=42)
 labels = kmeans.fit_predict(X)
     </pre>
 
-    <ul>
-        <li>Cluster 1: low-intensity recovery movement</li>
-        <li>Cluster 2: moderate repositioning phases</li>
-        <li>Cluster 3: high-intensity sprint/cut actions</li>
-    </ul>
-
-    <!-- OUTPUT -->
     <h2>Final Output</h2>
 
     <p>
@@ -234,10 +192,6 @@ labels = kmeans.fit_predict(X)
         <li>Athlete and drill context</li>
         <li>Movement-based clustering labels</li>
     </ul>
-
-    <p>
-        This enables downstream analysis of workload, performance trends, and movement efficiency across athletes and sessions.
-    </p>
 
 </div>
 
