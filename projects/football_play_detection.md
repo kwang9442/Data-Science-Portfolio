@@ -248,6 +248,16 @@ labels = kmeans.fit_predict(X)
     <li>Used KMeans clustering to identify movement and behavior patterns.</li>
 </ul>
 
+<h2>Ongoing Work</h2>
+
+<p>
+    Player movement trajectories were extracted from detected plays and normalized into fixed-length sequences. Similar movement paths were grouped together to identify recurring spatial behavior patterns during drills and team periods.
+</p>
+
+<div style="text-align: center;">
+        <img src="../images/Trajectory-2D.png" alt="Trajectories"  width="500">
+</div>
+
 </div>
 
 <footer>
