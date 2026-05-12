@@ -59,6 +59,10 @@
             border-radius: 8px;
             overflow-x: auto;
         }
+        pre code {
+        color: #eee;
+        background: transparent;
+    }
 
         .note {
             background: #fff3cd;
@@ -140,9 +144,9 @@
         I computed velocity change (dv) as the primary signal for detecting movement intensity shifts.
     </p>
 
-    <pre><code class="language-python">
+    <pre>
 df['dv'] = df['v'].diff().abs()
-    </code></pre>
+    </pre>
 
     <!-- PLAY DETECTION -->
     <h2>3. Play Detection Engine</h2>
@@ -152,7 +156,7 @@ df['dv'] = df['v'].diff().abs()
         A threshold-based system is used with expansion logic to capture full movement sequences.
     </p>
 
-    <pre class = "red-code">
+    <pre>
 if v >= high_thresh:
     peak_start = i
 
@@ -171,7 +175,7 @@ while next_v > low_thresh:
         PELT change-point detection is used to validate whether detected plays align with structural shifts in movement intensity.
     </p>
 
-    <pre class = "red-code">
+    <pre>
 algo = rpt.Pelt(model="rbf").fit(vel)
 cps = algo.predict(pen=30)
     </pre>
@@ -184,7 +188,7 @@ cps = algo.predict(pen=30)
         This allows performance to be analyzed within specific drills and practice contexts.
     </p>
 
-    <pre class = "red-code">
+    <pre>
 tree.addi(start, end, period_name)
 matches = trees[athlete][time]
     </pre>
@@ -197,7 +201,7 @@ matches = trees[athlete][time]
         to identify recurring behavioral patterns.
     </p>
 
-    <pre class = "red-code">
+    <pre>
 kmeans = KMeans(n_clusters=3, random_state=42)
 labels = kmeans.fit_predict(X)
     </pre>
