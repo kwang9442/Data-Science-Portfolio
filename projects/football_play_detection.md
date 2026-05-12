@@ -174,7 +174,7 @@ df['dv'] = df['v'].diff().abs()
     </code></pre>
     
     <p>
-This approach ensures that each detected segment shows a physically meaningful play rather than short noise spikes in sensor data. Initially (left graph), The segmentation algorithm identifies repeated high-intensity movement windows throughout a drill. Highlighted regions represent detected play intervals extracted from continuous GPS velocity streams. After a closer inspection (right graph), this is a zoomed-in view of an individual detected play segment. The highlighted intervals show how sustained movement periods were isolated from surrounding low-activity phases.
+This approach makes sure that each detected segment shows a physically meaningful play rather than short noise spikes in sensor data. Initially (left graph), the segmentation algorithm identifies repeated high-intensity movement windows throughout a drill. the highlighted regions represent detected play intervals from continuous GPS velocity streams. After a closer inspection (right graph), this is a zoomed-in view of an individual detected play segment. These highlighted intervals show how sustained movement periods were isolated from surrounding low-activity phases.
     </p>
 
     <div style="display: flex; justify-content: center; gap: 30px;">
@@ -195,7 +195,7 @@ change_points = algo.predict(pen=30)
 </code></pre>
 
 <p>
-    This allowed cross-validation between heuristic play detection and statistically inferred motion changes,improving segmentation reliability. Statistical change-point detection was applied to player velocity signals using the PELT algorithm. Red dashed lines indicate detected structural shifts in movement intensity, helping validate play segmentation boundaries.
+    This allowed cross-validation between heuristic play detection and statistically inferred motion changes, improving segmentation reliability. Statistical change-point detection was applied to player velocity signals across one drill at practice using the PELT algorithm. Red dashed lines indicate detected structural shifts in movement intensity, helping validate play segmentation boundaries.
 </p>
 
 <div style="text-align: center;">
@@ -217,8 +217,7 @@ change_points = algo.predict(pen=30)
     <h2>6. Movement Pattern Clustering</h2>
 
 <p>
-    To analyze behavioral patterns across time windows, I aggregated 5-second movement chunks and extracted features such as:
-    average velocity change and frequency of high-intensity movement events.
+    To analyze behavioral patterns across time windows, I aggregated 5-second movement chunks and extracted features such as, average velocity change and frequency of high-intensity movement events.
 </p>
 
 <pre><code>
