@@ -93,9 +93,9 @@
     <h2>Project Overview</h2>
 
     <p>
-        This project builds an end-to-end analytics system for NCAA Division I football GPS tracking data.
-        It transforms raw athlete movement data (x, y position + velocity over time) into structured “plays”
-        that can be used to analyze workload, movement intensity, and behaviors.
+        This project built an end-to-end analytics system for NCAA Division I football GPS tracking data.
+        It transformed raw athlete movement data (x, y position + velocity over time) into structured “plays”
+        that could be used to analyze workload, movement intensity, and behaviors.
     </p>
 
     <p>
@@ -122,10 +122,10 @@
     </p>
 
     <ul>
-        <li>Filtering individual athletes from team tracking streams</li>
-        <li>Sorting and aligning time-series data</li>
-        <li>Handling missing or noisy velocity values</li>
-        <li>Standardizing timestamps across drills</li>
+        <li>Filtered individual athletes from team tracking streams</li>
+        <li>Sorted and aligned time-series data</li>
+        <li>Handled missing or noisy velocity values</li>
+        <li>Standardized timestamps across drills</li>
     </ul>
 
     <h2>2. Movement Signal Processing</h2>
@@ -141,8 +141,8 @@ df['dv'] = df['v'].diff().abs()
     <h2>3. Play Detection Engine (Time-Series Segmentation)</h2>
 
     <p>
-        A custom rule-based segmentation system was developed to detect discrete “plays” from continuous movement data.
-        A play is defined as a bounded time interval where player velocity exceeds a dynamic threshold and returns to baseline.
+        A custom rule-based segmentation system was made to detect discrete “plays” from continuous movement data.
+        A play is defined as a bounded time interval where a players' velocity exceeds a dynamic threshold and then returns to baseline.
     </p>
     
     <p>
@@ -164,7 +164,7 @@ df['dv'] = df['v'].diff().abs()
     </code></pre>
     
     <p>
-        This approach ensures that each detected segment represents a physically meaningful play rather than short noise spikes in sensor data.
+        This approach ensures that each detected segment shows a physically meaningful play rather than short noise spikes in sensor data.
     </p>
 
    <h2>4. Change-Point Detection (Signal Validation)</h2>
@@ -209,7 +209,7 @@ labels = kmeans.fit_predict(X)
 </code></pre>
 
 <p>
-    This produced three interpretable movement states:
+    This made three interpretable movement states:
 </p>
 
 <ul>
