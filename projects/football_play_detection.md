@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -21,13 +22,12 @@
         header {
             background: #0b1d3a;
             color: white;
-            padding: 45px 20px;
+            padding: 60px 20px;
             text-align: center;
         }
         header h1 {
             margin: 0;
             font-size: 2.4rem;
-            font-weight: 700;
         }
         .container {
             max-width: 900px;
@@ -39,34 +39,35 @@
         }
         h2 {
             margin-top: 40px;
-            font-size: 1.7rem;
             color: #0b1d3a;
         }
         .section-desc {
-            font-size: 1.05rem;
-            margin-bottom: 15px;
+            line-height: 1.6
             color: #333;
         }
         pre {
             background: #1e1e1e;
-            padding: 15px;
+            padding: 12px;
             border-radius: 8px;
             overflow-x: auto;
             color: #eee;
         }
+        ul {
+            line-height:1.7;
+        }
+        
         .disclaimer {
-            background: #fff3cd;
+            background: #f1f5f9;
             padding: 12px;
-            border-left: 5px solid #e0b400;
+            border-left: 4px solid #64748b;
             border-radius: 6px;
-            margin-top: 15px;
+            margin-top: 20px;
             font-size: 0.95rem;
         }
         footer {
             text-align: center;
             padding: 20px;
             color: #555;
-            margin-top: 30px;
         }
     </style>
 </head>
@@ -75,11 +76,10 @@
 
 <header>
     <h1>D1 Football — Play Detection Project</h1>
-    <p>Velocity Segmentation • Change-Point Detection • Clustering</p>
+    <p>Play Segmentation • Movement Analytics • Clustering</p>
 </header>
 
 <div class="container">
-
     <h2>1. Peak-Based Play Segmentation</h2>
     <p class="section-desc">
         This function identifies play boundaries using velocity peaks, then expands each segment while 
