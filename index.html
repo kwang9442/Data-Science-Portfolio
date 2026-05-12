@@ -289,7 +289,7 @@
         <div class="project-highlights">
             <div class="highlight-box">
                 <h4>Methods</h4>
-                <p>Mixed-effects modeling, feature engineering, regression analysis, and regression visualization </p>
+                <p>Mixed-effects modeling, feature engineering, regression analysis, and regression visualization. </p>
             </div>
             <div class="highlight-box">
                 <h4>Impact</h4>
@@ -311,33 +311,49 @@
     </section>
 
     <!--FOOTBALL -->
-    <section class="content-section">
+    <section class="content-section" id="projects">
         <h2>D1 Football Play Detection</h2>
-
+    
         <p>
-            An analytics pipeline built for NCAA D1 football tracking data that identifies  
-            individual plays using velocity-based segmentation, change detection,  
-            practice-period matching, and trajectory clustering.  
-            The pipeline automates athlete movement interpretation at scale and provides a  
-            reproducible structure for segmenting raw tracking streams into meaningful plays.
+            This project builds an automated pipeline to segment NCAA Division I football
+            tracking data into individual plays using velocity patterns, movement changes,
+            and trajectory clustering.
         </p>
-
-        <div class="disclaimer">
-            <strong>Confidentiality Notice:</strong>  
-            Due to our schools' data policies, I cannot display raw tracking  
-            datasets, full movement distributions, or athlete-identifying information.  
-            All examples shown use derived, anonymized, or illustrative subsets.
+    
+        <p>
+            The goal is to convert raw player tracking streams into structured plays that
+            can be analyzed for performance, strategy, and workload evaluation.
+        </p>
+    
+        <div class="project-highlights">
+    
+            <div class="highlight-box">
+                <h4>Methods</h4>
+                <p>
+                    Velocity-based segmentation, change-point detection, and clustering
+                    of player movement trajectories. 
+                </p>
+            </div>
+    
+            <div class="highlight-box">
+                <h4>Impact</h4>
+                <p>
+                    Cleanly segmented plays that enable downstream analysis of tactics,
+                    movement behavior, and athlete workload.
+                </p>
+            </div>
+    
         </div>
-
-        <h3 style="margin-top:25px;">Methods Used</h3>
-        <ul>
-            <li>Velocity peak-based segmentation to define play boundaries</li>
-            <li>Abrupt movement change detection to refine transitions</li>
-            <li>Interval Tree matching to map plays to practice periods</li>
-            <li>K-Means clustering of player movement trajectories</li>
-        </ul>
-
-        <a href="projects/football_play_detection.html" class="btn">View Full Project →</a>
+    
+        <div class="disclaimer">
+            <strong>Confidentiality Notice:</strong>
+            Due to data restrictions, raw tracking data and athlete-identifying information
+            cannot be displayed. All visuals shown are derived or anonymized.
+        </div>
+    
+        <a href="projects/football_play_detection.html" class="btn">
+            View Full Project →
+        </a>
     </section>
     
     <section class="content-section" id="skills">
