@@ -230,9 +230,9 @@ labels = kmeans.fit_predict(X)
 </p>
 
 <ul>
-    <li><b>Low Activity:</b> Resting, walking, recovery phases</li>
-    <li><b>Moderate Activity:</b> Repositioning and transitional movement</li>
-    <li><b>High Activity:</b> Sprinting, cutting, and game-speed exertion</li>
+    <li><b>Low Activity (Yellow):</b> Resting, walking, recovery phases</li>
+    <li><b>Moderate Activity (Purple):</b> Repositioning and transitional movement</li>
+    <li><b>High Activity (Blue):</b> Sprinting, cutting, and game-speed exertion</li>
 </ul>
 
 <div style="text-align: center;">
