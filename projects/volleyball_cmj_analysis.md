@@ -294,7 +294,7 @@ jumps21 = (
 </code></pre>
 
 <div class="section-image">
-    <img src="../images/Adjust-RSI.png"
+    <img src="../images/Adjust-RSI-New.png"
          alt="Adjusted RSI Load Relationship"
          width="500">
 </div>
@@ -361,7 +361,7 @@ for athlete, group in df.groupby('athlete'):
 </code></pre>
 
 <div class="section-image">
-    <img src="../images/One-Line.png"
+    <img src="../images/One-Line-New.png"
          alt="Athlete Specific Load Response"
          width="500">
 </div>
