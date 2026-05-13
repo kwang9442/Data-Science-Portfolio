@@ -132,7 +132,7 @@
 <body>
 
 <header>
-    <h1>D1 Volleyball — CMJ Load & Readiness Analysis</h1>
+    <h1>Volleyball CMJ Load & Readiness Analysis</h1>
     <p>Sports Analytics • Mixed Models • Athlete Monitoring • Load Analysis</p>
 </header>
 
@@ -244,7 +244,7 @@ tstat, pval = ttest_1samp(subset, 0)
 <div class="section-image">
     <img src="../images/Dist-Pre-Post-Box.png"
          alt="Pre Post CMJ Boxplots"
-         width="650">
+         width="500">
 </div>
 <p>
     Standardized post-practice minus pre-practice CMJ differences were visualized
@@ -296,7 +296,7 @@ jumps21 = (
 <div class="section-image">
     <img src="../images/Adjust-RSI.png"
          alt="Adjusted RSI Load Relationship"
-         width="620">
+         width="500">
 </div>
 <p>
     Adjusted rolling workload features were evaluated against RSI_Modified
@@ -333,7 +333,7 @@ model = smf.mixedlm(
 <div class="section-image">
     <img src="../images/Within-RSI.png"
          alt="Within Athlete RSI Model"
-         width="620">
+         width="500">
 </div>
 
 <p>
@@ -363,7 +363,7 @@ for athlete, group in df.groupby('athlete'):
 <div class="section-image">
     <img src="../images/One-Line.png"
          alt="Athlete Specific Load Response"
-         width="720">
+         width="500">
 </div>
 
 <p>
@@ -372,6 +372,29 @@ for athlete, group in df.groupby('athlete'):
     across players, reinforcing the importance of athlete-specific monitoring
     rather than relying entirely on team-wide averages.
 </p>
+
+<h2>Overall Findings</h2>
+
+<li>
+    <strong>Chronic load relationships:</strong> 7-day and 21-day workload metrics showed weak or slightly positive
+    associations with CMJ performance, likely reflecting seasonal adaptation and performance improvements over time
+    rather than fatigue accumulation.
+</li>
+
+<li>
+    <strong>Predictive value:</strong> Neither acute nor chronic workload measures strongly predicted decreases in
+    CMJ performance, limiting their standalone use as fatigue indicators in this dataset.
+</li>
+
+<li>
+    <strong>Contextual interpretation:</strong> The absence of strong fatigue signals may indicate well-managed
+    training loads, but could also reflect ceiling effects or timing within the competitive season.
+</li>
+
+<li>
+    <strong>Limitations:</strong> Findings are constrained by a small sample size (n = 10 athletes) and a single
+    team environment, which limits generalizability to other populations or training systems.
+</li>
     <h2>What This Project Demonstrates</h2>
 
     <ul>
