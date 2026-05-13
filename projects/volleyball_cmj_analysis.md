@@ -373,55 +373,6 @@ for i in range(fit_data[load_vars].shape[1]):
         to improve interpretability and statistical stability.
     </p>
 
-    <!-- ====================================================== -->
-    <!-- FULL MODEL -->
-    <!-- ====================================================== -->
-
-    <h2>10. Full Mixed Model Evaluation Across Performance Metrics</h2>
-
-    <p>
-        Finally, mixed models were applied across multiple CMJ outcome variables
-        to evaluate how workload influenced different dimensions of athletic performance.
-    </p>
-
-<pre><code class="language-python">
-for target in [
-
-    'JUMP_HEIGHT',
-    'RSI_MODIFIED',
-    'PEAK_TAKEOFF_POWER',
-    'TAKEOFF_VELOCITY',
-    'CONTRACTION_TIME',
-    'COUNTERMOVEMENT_DEPTH'
-
-]:
-
-    model = smf.mixedlm(
-        model_str,
-        data=fit_data,
-        groups='profileID'
-    ).fit()
-
-    pred = model.predict(fit_data)
-
-    plt.scatter(fit_data[target], pred)
-    plt.show()
-</code></pre>
-
-    <p>
-        Most workload variables showed weak or slightly positive relationships
-        with CMJ performance metrics.
-    </p>
-
-    <p>
-        This was somewhat counterintuitive since higher workload is often expected
-        to reduce neuromuscular readiness through fatigue accumulation.
-    </p>
-
-    <p>
-        One possible interpretation is that athletes adapted effectively
-        to increasing seasonal workloads and improved throughout the competitive season.
-    </p>
 
     <h2>What This Project Demonstrates</h2>
 
