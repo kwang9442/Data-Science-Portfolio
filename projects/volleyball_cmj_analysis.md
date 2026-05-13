@@ -241,10 +241,15 @@ for col in metrics:
 tstat, pval = ttest_1samp(subset, 0)
 </code></pre>
 
+<div class="section-image">
+    <img src="../images/Dist-Pre-Post-Box.png"
+         alt="Pre Post CMJ Boxplots"
+         width="650">
+</div>
 <p>
-    Most CMJ variables remained relatively stable after practice,
-    although Peak Takeoff Power and Countermovement Depth showed
-    statistically significant increases post-session.
+    Standardized post-practice minus pre-practice CMJ differences were visualized
+    across performance metrics. Most variables remained relatively stable following practice,
+    although Peak Takeoff Power and Countermovement Depth showed statistically significant         increases.
 </p>
 
    <h2>4. Regression Modeling of Jump Performance</h2>
@@ -288,10 +293,17 @@ jumps21 = (
 )
 </code></pre>
 
+<div class="section-image">
+    <img src="../images/Adjust-RSI.png"
+         alt="Adjusted RSI Load Relationship"
+         width="620">
+</div>
 <p>
-    Acute:Chronic workload ratios (ACWR) were also evaluated
-    to identify short-term workload spikes.
+    Adjusted rolling workload features were evaluated against RSI_Modified
+    to examine whether increases in short-term jump load were associated
+    with changes in neuromuscular readiness. Acute:Chronic workload ratios (ACWR) were also         evaluated to identify short-term workload spikes.
 </p>
+
 <h2>6. Mixed Effects Modeling</h2>
 
 <p>
@@ -318,8 +330,16 @@ model = smf.mixedlm(
 ).fit()
 </code></pre>
 
+<div class="section-image">
+    <img src="../images/Within-RSI.png"
+         alt="Within Athlete RSI Model"
+         width="620">
+</div>
+
 <p>
-    This approach helped evaluate whether increases in workload
+    Each point represents an individual CMJ test observation.
+    The fitted mixed-model trend line estimates the average within-athlete relationship
+    between weekly jump load and RSI_Modified after accounting for athlete-specific baselines. This approach helped evaluate whether increases in workload
     relative to an athlete's own baseline were associated with
     changes in neuromuscular readiness.
 </p>
@@ -327,7 +347,8 @@ model = smf.mixedlm(
 
 <p>
     Individual athlete regression plots were created
-    to visualize how workload relationships differed across players.
+    to visualize how workload relationships differed across players. Relationships between workload and performance varied considerably
+    across athletes, reinforcing the importance of individualized monitoring.
 </p>
 
 <pre><code class="language-python">
@@ -339,41 +360,18 @@ for athlete, group in df.groupby('athlete'):
     )
 </code></pre>
 
+<div class="section-image">
+    <img src="../images/One-Line.png"
+         alt="Athlete Specific Load Response"
+         width="720">
+</div>
+
 <p>
-    Relationships between workload and performance varied considerably
-    across athletes, reinforcing the importance of individualized monitoring.
+    Separate regression lines were generated for each athlete to visualize
+    individual workload-performance relationships. Trends varied considerably
+    across players, reinforcing the importance of athlete-specific monitoring
+    rather than relying entirely on team-wide averages.
 </p>
-
-    <h2>9. Multicollinearity & Feature Evaluation</h2>
-
-    <p>
-        Many workload metrics were highly correlated with one another,
-        creating multicollinearity concerns within regression models.
-    </p>
-
-    <p>
-        Variance Inflation Factor (VIF) testing and correlation matrices were used
-        to evaluate redundancy between workload variables.
-    </p>
-
-<pre><code class="language-python">
-for i in range(fit_data[load_vars].shape[1]):
-
-    print(
-        load_vars[i],
-        variance_inflation_factor(
-            fit_data[load_vars],
-            i
-        )
-    )
-</code></pre>
-
-    <p>
-        Several models were simplified into reduced variable sets
-        to improve interpretability and statistical stability.
-    </p>
-
-
     <h2>What This Project Demonstrates</h2>
 
     <ul>
@@ -388,8 +386,6 @@ for i in range(fit_data[load_vars].shape[1]):
         <li>Performed paired statistical testing and regression analysis.</li>
 
         <li>Visualized individualized athlete load-response relationships.</li>
-
-        <li>Investigated multicollinearity and model interpretability issues.</li>
 
         <li>Translated statistical results into applied sports science interpretations.</li>
     </ul>
