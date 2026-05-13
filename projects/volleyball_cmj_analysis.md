@@ -373,28 +373,26 @@ for athlete, group in df.groupby('athlete'):
     rather than relying entirely on team-wide averages.
 </p>
 
-<h2>Overall Findings</h2>
+<h2>Key Findings</h2>
 
-<li>
-    <strong>Chronic load relationships:</strong> 7-day and 21-day workload metrics showed weak or slightly positive
-    associations with CMJ performance, likely reflecting seasonal adaptation and performance improvements over time
-    rather than fatigue accumulation.
-</li>
+<h3>Acute Responses (Pre–Post CMJ)</h3>
+<p>
+No consistent or statistically meaningful changes were observed in CMJ performance following practice sessions. 
+This suggests athletes were generally able to tolerate daily training loads without immediate declines in neuromuscular performance.
+</p>
 
-<li>
-    <strong>Predictive value:</strong> Neither acute nor chronic workload measures strongly predicted decreases in
-    CMJ performance, limiting their standalone use as fatigue indicators in this dataset.
-</li>
+<h3>Chronic Load Relationships (7-day / 21-day)</h3>
+<p>
+Chronic workload metrics showed weak and slightly positive associations with CMJ performance variables. 
+These trends may reflect seasonal adaptation or broader performance improvements rather than fatigue accumulation.
+Overall, chronic load was not strongly associated with reductions in CMJ performance in this cohort.
+</p>
 
-<li>
-    <strong>Contextual interpretation:</strong> The absence of strong fatigue signals may indicate well-managed
-    training loads, but could also reflect ceiling effects or timing within the competitive season.
-</li>
-
-<li>
-    <strong>Limitations:</strong> Findings are constrained by a small sample size (n = 10 athletes) and a single
-    team environment, which limits generalizability to other populations or training systems.
-</li>
+<h3>Overall Interpretation</h3>
+<p>
+Across both acute and chronic analyses, there was no consistent evidence that increased training load led to decrements in CMJ performance. 
+However, findings are limited by small sample size and a single-team dataset.
+</p>
     <h2>What This Project Demonstrates</h2>
 
     <ul>
